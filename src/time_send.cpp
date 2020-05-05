@@ -1,5 +1,7 @@
-#include "std_msgs/msg/header.hpp"
 #include "rclcpp/rclcpp.hpp"
+#include "std_msgs/msg/header.hpp"
+
+// Send a simple std_msgs::msg::Header message with the current time
 
 constexpr int QUEUE_SIZE = 10;
 
@@ -19,8 +21,8 @@ public:
     timer_ = create_wall_timer(std::chrono::milliseconds{20}, [this]() -> void
     {
       std_msgs::msg::Header msg;
-      msg.stamp = this->now();
-      this->pub_->publish(msg);
+      msg.stamp = now();
+      pub_->publish(msg);
     });
   }
 };
