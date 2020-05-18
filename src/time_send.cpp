@@ -1,9 +1,8 @@
 #include "rclcpp/rclcpp.hpp"
+#include "pipe_perf/stats.hpp"
 #include "std_msgs/msg/header.hpp"
 
 // Send a simple std_msgs::msg::Header message with the current time
-
-constexpr int QUEUE_SIZE = 10;
 
 class TimeSendNode : public rclcpp::Node
 {

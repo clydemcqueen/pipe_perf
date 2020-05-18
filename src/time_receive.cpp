@@ -1,12 +1,8 @@
-#include <iomanip>
 #include "pipe_perf/stats.hpp"
 #include "rclcpp/rclcpp.hpp"
 #include "std_msgs/msg/header.hpp"
 
 // Receive a simple std_msgs::msg::Header message and print some info about the time lag
-
-constexpr int QUEUE_SIZE = 10;
-constexpr int NUM_MEASUREMENTS = 300;
 
 class TimeReceiveNode : public rclcpp::Node
 {
@@ -28,17 +24,12 @@ public:
       {
         if (!receiving_) {
           receiving_ = true;
-          std::cout << "receiving messages" << std::endl;
+          intro("lag");
         }
 
         values_.push_back((now() - msg->stamp).seconds() * 1e6);
         if (values_.size() >= NUM_MEASUREMENTS) {
-          auto u = mean(values_);
-          auto s = stdev(values_, u);
-          std::cout << std::fixed << std::setprecision(0)
-                    << "average lag over " << NUM_MEASUREMENTS << " measurements: "
-                    << u << " μs +/- " << s << std::endl;
-          values_.clear();
+          report(values_);
         }
       });
   }

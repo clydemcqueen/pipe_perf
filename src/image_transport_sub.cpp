@@ -1,11 +1,6 @@
-#include <iomanip>
 #include "image_transport/image_transport.h"
 #include "pipe_perf/stats.hpp"
 #include "rclcpp/rclcpp.hpp"
-
-// Receive a simple std_msgs::msg::Header message and print some info about the time lag
-
-constexpr int NUM_MEASUREMENTS = 300;
 
 class ImageTransportSubNode : public rclcpp::Node
 {
@@ -21,21 +16,17 @@ public:
 
     values_.reserve(NUM_MEASUREMENTS);
 
+    // Subscribe to image_raw/h264, image_transport will call plugin to decode
     sub_ = image_transport::create_subscription(this, "image_raw", [this](const auto & msg)
     {
       if (!receiving_) {
         receiving_ = true;
-        std::cout << "receiving messages" << std::endl;
+        intro("lag");
       }
 
       values_.push_back((now() - msg->header.stamp).seconds() * 1e6);
       if (values_.size() >= NUM_MEASUREMENTS) {
-        auto u = mean(values_);
-        auto s = stdev(values_, u);
-        std::cout << std::fixed << std::setprecision(0)
-                  << "average lag over " << NUM_MEASUREMENTS << " measurements: "
-                  << u << " μs +/- " << s << std::endl;
-        values_.clear();
+        report(values_);
       }
     }, "h264"); // TODO param
   }
