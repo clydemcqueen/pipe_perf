@@ -2,6 +2,10 @@
 #include "pipe_perf/stats.hpp"
 #include "rclcpp/rclcpp.hpp"
 
+// Sub to h264 packets directly
+// Using StampedNode would give us time, but not size -- so sub directly
+// TODO could use rmw layer to get size, and probably time, see:
+//  https://discourse.ros.org/t/help-wanted-plotjuggler-for-ros2/11425/2
 class H264SubNode : public rclcpp::Node
 {
   typename rclcpp::Subscription<h264_msgs::msg::Packet>::SharedPtr sub_;

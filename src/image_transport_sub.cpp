@@ -2,6 +2,7 @@
 #include "pipe_perf/stats.hpp"
 #include "rclcpp/rclcpp.hpp"
 
+// Sub to h264 images using image transport -- this will call the h264 decoder behind the scenes
 class ImageTransportSubNode : public rclcpp::Node
 {
   image_transport::Subscriber sub_;
